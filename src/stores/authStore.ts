@@ -34,7 +34,7 @@ export const useAuthStore = defineStore('auth', {
       }
     },
 
-    async register(user: User) {
+    async register(user: Omit<User, '_id'>) {
       try {
         await api.post('/api/register', user, { withCredentials: true });
         await this.verifyAuth(); // Verifica la autenticación después de registrar
