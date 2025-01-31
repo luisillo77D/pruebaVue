@@ -29,7 +29,7 @@ export const useAuthStore = defineStore('auth', {
         await this.verifyAuth(); // Verifica la autenticación después de iniciar sesión
         this.toast.success('Sesión iniciada correctamente.');
       } catch (error) {
-        this.toast.error('Credenciales incorrectas.');
+        this.toast.error('Error de autentificacion.');
         throw error;
       }
     },

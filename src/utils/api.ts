@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const api = axios.create({
-  baseURL: 'http://localhost:3000',
+  baseURL: 'https://prueba-vue-beta.vercel.app',
   withCredentials: true, // Permite el envío de cookies
 });
 
