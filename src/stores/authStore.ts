@@ -49,6 +49,7 @@ export const useAuthStore = defineStore('auth', {
     async logout() {
       try {
         await api.post('/api/logout', {}, { withCredentials: true });
+        this.deleteCookie('token'); // Elimina la cookie del token
         this.resetAuthState();
         this.toast.success('Sesión cerrada correctamente.');
       } catch (error) {
@@ -60,6 +61,10 @@ export const useAuthStore = defineStore('auth', {
     resetAuthState() {
       this.user = null;
       this.isAuthenticated = false;
+    },
+
+    deleteCookie(name: string) {
+      document.cookie = name + '=; Max-Age=0; path=/; domain=' + window.location.hostname;
     },
   },
 
