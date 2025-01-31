@@ -1,18 +1,15 @@
 # pruebaVue
 
-This template should help get you started developing with Vue 3 in Vite.
-
-## Recommended IDE Setup
-
-[VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur).
-
-## Type Support for `.vue` Imports in TS
-
-TypeScript cannot handle type information for `.vue` imports by default, so we replace the `tsc` CLI with `vue-tsc` for type checking. In editors, we need [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) to make the TypeScript language service aware of `.vue` types.
-
-## Customize configuration
-
-See [Vite Configuration Reference](https://vite.dev/config/).
+Este proyecto consume la API que se creo con express y contiene
+- Sistema de autentificacion de usuarios
+- Registro de nuevos usuarios
+- Manejo de tareas como
+- Crear nuevas tareas
+- Editar y eliminar tareas
+- Ver y cambiar el estado de las tareas
+- Tiene paginacion
+- Sistema de filtrado por Titulo o por estado
+- Tambien tiene alertitas con vue toastificationv2
 
 ## Project Setup
 
@@ -26,14 +23,5 @@ npm install
 npm run dev
 ```
 
-### Type-Check, Compile and Minify for Production
-
-```sh
-npm run build
-```
-
-### Lint with [ESLint](https://eslint.org/)
-
-```sh
-npm run lint
-```
+### Fin
+Estuvo interesante el probar Vue ya que nunca lo habia usado y si tiene muchas similitudes con otros frameworks de js como angular, algo que no investigue es si se puede poner los estilos en otro lado porque al final me estaba volviendo loco con tantas lineas en el minieditor de vsc xd.
