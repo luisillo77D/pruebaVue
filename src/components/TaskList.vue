@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { useTaskStore } from '@/stores/taskStore';
 import { defineEmits } from 'vue';
-import type { Task } from '@/types/task';
+import type { Task } from '@/types/Task';
 
 const taskStore = useTaskStore();
 const emit = defineEmits(['edit-task']);

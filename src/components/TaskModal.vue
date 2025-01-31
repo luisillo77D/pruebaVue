@@ -15,7 +15,7 @@
   <script setup lang="ts">
   import { defineProps, defineEmits, ref, watch } from 'vue';
   import { useTaskStore } from '@/stores/taskStore';
-  import type { Task } from '@/types/task';
+  import type { Task } from '@/types/Task';
   
   const props = defineProps<{ task?: Task }>();
   const emit = defineEmits(['close']);
