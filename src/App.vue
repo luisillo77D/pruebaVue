@@ -10,7 +10,7 @@ onMounted(async() => {
 </script>
 
 <template>
-  <div>
+  <div class="app">
     <router-view></router-view> <!-- Muestra la vista activa según la ruta -->
   </div>
 </template>
@@ -21,5 +21,11 @@ onMounted(async() => {
   margin: 0;
   padding: 0;
   font-family: sans-serif;
+}
+.app {
+  height: 100vh;
+  max-width: 1200px;
+  margin: 20px auto;
+  padding: 20px;
 }
 </style>

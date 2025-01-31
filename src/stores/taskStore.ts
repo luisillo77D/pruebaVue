@@ -2,6 +2,8 @@ import { defineStore } from 'pinia';
 import { ref, computed } from 'vue';
 import api from '@/utils/api';
 import type { Task } from '@/types/Task';
+import { useToast } from 'vue-toastification';
+
 
 export const useTaskStore = defineStore('taskStore', () => {
   const tasks = ref<Task[]>([]);
@@ -9,6 +11,7 @@ export const useTaskStore = defineStore('taskStore', () => {
   const filterStatus = ref<'all' | 'completed' | 'pending'>('all');
   const currentPage = ref(1);
   const tasksPerPage = 6;
+  const toast = useToast();
 
   const fetchTasks = async () => {
     try {
@@ -25,8 +28,10 @@ export const useTaskStore = defineStore('taskStore', () => {
       const { data } = await api.post<Task>('/api/tasks/', newTask);
       tasks.value.unshift(data);
       console.log('Tarea creada:', data);
+      toast.success('Tarea creada correctamente.');
     } catch (error) {
       console.error('Error al crear tarea:', error);
+      toast.error('Hubo un problema al crear la tarea.');
     }
   };
 
@@ -35,8 +40,10 @@ export const useTaskStore = defineStore('taskStore', () => {
       await api.put(`/api/tasks/status/${taskId}`, { status });
       const task = tasks.value.find(t => t._id === taskId);
       if (task) task.status = status;
+      toast.success(`Tarea ${status ? 'completada' : 'pendiente'} correctamente.`);
     } catch (error) {
       console.error('Error al actualizar tarea:', error);
+      toast.error('Hubo un problema al actualizar la tarea.');
     }
   };
 
@@ -48,7 +55,9 @@ export const useTaskStore = defineStore('taskStore', () => {
         task.title = updatedTask.title;
         task.description = updatedTask.description;
       }
+      toast.success('Tarea actualizada correctamente.');
     } catch (error) {
+      toast.error('Hubo un problema al actualizar la tarea.');
       console.error('Error al actualizar tarea:', error);
     }
   };
@@ -57,7 +66,9 @@ export const useTaskStore = defineStore('taskStore', () => {
     try {
       await api.delete(`/api/tasks/${taskId}`);
       tasks.value = tasks.value.filter(t => t._id !== taskId);
+      toast.success('Tarea eliminada correctamente.');
     } catch (error) {
+      toast.error('Hubo un problema al eliminar la tarea.');
       console.error('Error al eliminar tarea:', error);
     }
   };

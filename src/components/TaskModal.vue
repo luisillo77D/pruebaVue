@@ -2,13 +2,11 @@
     <div class="modal-overlay">
       <div class="modal">
         <h2>{{ taskData._id ? 'Editar Tarea' : 'Nueva Tarea' }}</h2>
-        <div class="form">
-            <input v-model="taskData.title" placeholder="Título" />
-            <textarea v-model="taskData.description" placeholder="Descripción"></textarea>
-        </div>
-        <div class="actions">
-            <button @click="saveTask">{{ taskData._id ? 'Guardar Cambios' : 'Crear Tarea' }}</button>
-            <button @click="$emit('close')">Cancelar</button>
+        <input v-model="taskData.title" placeholder="Título" class="input" />
+        <textarea v-model="taskData.description" placeholder="Descripción" class="textarea"></textarea>
+        <div class="buttons">
+          <button @click="confirmSave" class="button primary">{{ taskData._id ? 'Guardar Cambios' : 'Crear Tarea' }}</button>
+          <button @click="$emit('close')" class="button secondary">Cancelar</button>
         </div>
       </div>
     </div>
@@ -17,10 +15,12 @@
   <script setup lang="ts">
   import { defineProps, defineEmits, ref, watch } from 'vue';
   import { useTaskStore } from '@/stores/taskStore';
+  import type { Task } from '@/types/task';
   
-  const props = defineProps<{ task?: any }>();
+  const props = defineProps<{ task?: Task }>();
   const emit = defineEmits(['close']);
   const taskStore = useTaskStore();
+  console.log(props.task);
   
   const taskData = ref({
     _id: '',
@@ -34,30 +34,32 @@
       if (newTask) {
         taskData.value = { ...newTask };
       } else {
-        taskData.value = { _id: '', title: '', description: '' };
+        taskData.value = { _id: '', title: '', description: '', };
       }
     },
     { immediate: true }
   );
   
-  const saveTask = async () => {
-    if (taskData.value._id) {
-      await taskStore.updateTask(taskData.value._id, {
-        title: taskData.value.title,
-        description: taskData.value.description,
-      });
-    } else {
-      await taskStore.createTask({
-        title: taskData.value.title,
-        description: taskData.value.description,
-      });
-    }
-    emit('close');
-  };
+  const confirmSave = async () => {
+  const confirm = window.confirm('¿Estás seguro de que quieres guardar los cambios?');
+  if (!confirm) return;
+
+  if (taskData.value._id) {
+    await taskStore.updateTask(taskData.value._id, {
+      title: taskData.value.title,
+      description: taskData.value.description,
+    });
+  } else {
+    await taskStore.createTask({
+      title: taskData.value.title,
+      description: taskData.value.description,
+    });
+  }
+  emit('close');
+};
   </script>
   
   <style scoped>
-  
   .modal-overlay {
     position: fixed;
     top: 0;
@@ -71,45 +73,84 @@
   }
   
   .modal {
-    display: flex;
-    width: 30%;
-    flex-direction: column;
     background: white;
     padding: 20px;
     border-radius: 8px;
+    width: 90%;
+    max-width: 500px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    animation: fadeIn 0.3s ease;
   }
-  .form {
-    padding-top: 10px;
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
+  
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: scale(0.9);
+    }
+    to {
+      opacity: 1;
+      transform: scale(1);
+    }
   }
-
-  .form input, .form textarea {
+  
+  h2 {
+    margin-bottom: 20px;
+    font-size: 1.5em;
+    text-align: center;
+  }
+  
+  .input,
+  .textarea {
+    width: 100%;
     padding: 10px;
+    margin-bottom: 10px;
     border: 1px solid #ddd;
     border-radius: 4px;
     font-size: 1em;
   }
-
-  .actions {
+  
+  .input:focus,
+  .textarea:focus {
+    border-color: #007bff;
+    outline: none;
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+  }
+  
+  .textarea {
+    resize: vertical;
+    height: 100px;
+  }
+  
+  .buttons {
     display: flex;
     justify-content: space-between;
-    margin-top: 20px;
+    gap: 10px;
   }
-
-    .actions button {
-        background-color: #007bff;
-        border: none;
-        border-radius: 4px;
-        color: #fff;
-        cursor: pointer;
-        padding: 10px 20px;
-        transition: background-color 0.3s ease;
-    }
-
-    textarea{
-        resize: none;
-    }
-  </style>
   
+  .button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 1em;
+    transition: background-color 0.3s ease;
+  }
+  
+  .button.primary {
+    background-color: #007bff;
+    color: white;
+  }
+  
+  .button.primary:hover {
+    background-color: #0056b3;
+  }
+  
+  .button.secondary {
+    background-color: #6c757d;
+    color: white;
+  }
+  
+  .button.secondary:hover {
+    background-color: #5a6268;
+  }
+  </style>

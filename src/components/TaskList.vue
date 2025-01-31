@@ -14,6 +14,13 @@ function formatDate(date: string): string {
 function editTask(task: Task) {
   emit('edit-task', task);
 }
+
+const confirmDelete = (taskId: string) => {
+  const confirm = window.confirm('¿Estás seguro de que quieres eliminar esta tarea?');
+  if (confirm) {
+    taskStore.deleteTask(taskId);
+  }
+};
 </script>
 
 <template>
@@ -21,7 +28,7 @@ function editTask(task: Task) {
       <li v-for="task in taskStore.paginatedTasks" :key="task._id" class="task-card">
         <div class="header">
           <h2>{{ task.title }}</h2>
-          <div>
+          <div :class="['status', task.status ? 'completed' : 'pending']">
             <span>{{ task.status ? 'Completada' : 'Pendiente' }}</span>
           </div>
         </div>
@@ -31,7 +38,7 @@ function editTask(task: Task) {
         </div>
         <div class="actions">
           <button @click="taskStore.updateTaskStatus(task._id, !task.status)">Cambiar estado</button>
-          <button @click="taskStore.deleteTask(task._id)">Eliminar</button>
+          <button @click="confirmDelete(task._id)" class="btn-eliminar">Eliminar</button>
           <button @click="editTask(task)">Editar</button> <!-- Nuevo botón -->
         </div>
       </li>
@@ -68,6 +75,20 @@ function editTask(task: Task) {
   margin-bottom: 8px;
 }
 
+.status {
+  padding: 5px 10px;
+  border-radius: 4px;
+  color: #fff;
+}
+
+.completed {
+  background-color: #28a745;
+}
+
+.pending {
+  background-color: #dc3545;
+}
+
 .body {
   margin-bottom: 16px;
 }
@@ -90,5 +111,13 @@ button {
 
 button:hover {
   background-color: #0056b3;
+}
+
+.btn-eliminar {
+  background-color: #dc3545;
+}
+
+.btn-eliminar:hover {
+  background-color: #c82333;
 }
 </style>

@@ -1,6 +1,7 @@
 import { defineStore } from 'pinia';
 import api from '@/utils/api';
 import type { User } from '@/types/User';
+import { useToast } from 'vue-toastification';
 
 export const useAuthStore = defineStore('auth', {
   state: () => ({
@@ -26,17 +27,33 @@ export const useAuthStore = defineStore('auth', {
       try {
         await api.post('/api/login', credentials, { withCredentials: true });
         await this.verifyAuth(); // Verifica la autenticación después de iniciar sesión
+        this.toast.success('Sesión iniciada correctamente.');
       } catch (error) {
+        this.toast.error('Credenciales incorrectas.');
         throw error;
       }
     },
+
+    async register(user: User) {
+      try {
+        await api.post('/api/register', user, { withCredentials: true });
+        await this.verifyAuth(); // Verifica la autenticación después de registrar
+        this.toast.success('Usuario registrado correctamente.');
+      } catch (error) {
+        console.error('Error al registrar usuario', error);
+        this.toast.error('Hubo un problema al registrar el usuario.');
+        throw error;
+      }
+    } ,
 
     async logout() {
       try {
         await api.post('/api/logout', {}, { withCredentials: true });
         this.resetAuthState();
+        this.toast.success('Sesión cerrada correctamente.');
       } catch (error) {
         console.error('Error al cerrar sesión', error);
+        this.toast.error('Hubo un problema al cerrar sesión.');
       }
     },
 
@@ -45,4 +62,8 @@ export const useAuthStore = defineStore('auth', {
       this.isAuthenticated = false;
     },
   },
+
+  getters: {
+    toast: () => useToast()
+  }
 });

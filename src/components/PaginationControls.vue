@@ -8,7 +8,7 @@ const taskStore = useTaskStore();
   <div class="pagination-controls">
     <button :disabled="taskStore.currentPage === 1" @click="taskStore.currentPage--" class="pagination-button">Anterior</button>
     <span class="pagination-info">Página {{ taskStore.currentPage }} de {{ Math.ceil(taskStore.tasks.length / 6) }}</span>
-    <button :disabled="taskStore.currentPage >= Math.ceil(taskStore.tasks.length / 5)" @click="taskStore.currentPage++" class="pagination-button">Siguiente</button>
+    <button :disabled="taskStore.currentPage >= Math.ceil(taskStore.tasks.length / 6)" @click="taskStore.currentPage++" class="pagination-button">Siguiente</button>
   </div>
 </template>
 
