@@ -54,6 +54,7 @@
       title: taskData.value.title,
       description: taskData.value.description,
     });
+    await taskStore.fetchTasks();
   }
   emit('close');
 };
